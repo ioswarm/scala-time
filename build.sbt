@@ -19,4 +19,21 @@ lazy val scala_time = project.in(file("."))
 
 lazy val time = project.in(file("time"))
 	.settings(settings)
+  .settings(
+		libraryDependencies ++= Seq(
+			lib.scalaTest
+		)
+	)
 
+lazy val lib = new {
+  object Version{
+    val argonaut = "6.2.2"
+
+		val scalaTest = "3.0.5"
+  }
+
+  val argonaut = "io.argonaut" %% "argonaut" % Version.argonaut
+
+	val scalaTest = "org.scalatest" %% "scalatest" % Version.scalaTest % Test
+
+}

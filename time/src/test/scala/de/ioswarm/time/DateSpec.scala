@@ -32,7 +32,7 @@ class DateSpec extends WordSpec with Matchers {
         tu._2.dayOfMonth should be(12)
       }
       "print text '2018-06-12'" in {
-        tu._2.toText should be("2018-06-12")
+        tu._2.toString should be("2018-06-12")
       }
       "equal same date" in {
         tu._2 shouldEqual Date(2018,6,12)

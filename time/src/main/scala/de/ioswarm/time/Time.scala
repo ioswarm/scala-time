@@ -26,13 +26,13 @@ trait TimeFacade[T <: TimeFacade[T]] {
 
 object Time {
 
-  def local(): Time = apply(Offsets.DEFAULT)
+  def utc: Time = apply(Offsets.UTC)
 
-  def now(): Time = Time(timeNumber(System.currentTimeMillis()).toLong, Offsets.UTC)
+  def now: Time = Time(timeNumber(System.currentTimeMillis()).toLong, Offsets.LOCAL)
 
-  def apply(): Time = now()
+  def apply(): Time = now
 
-  def apply(epoch: Long): Time = Time(epoch, Offsets.DEFAULT)
+  def apply(epoch: Long): Time = Time(epoch, Offsets.LOCAL)
 
   def apply(offset: Offset): Time = Time(timeNumber(System.currentTimeMillis()).toLong, offset)
 
@@ -73,11 +73,7 @@ case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Ti
 
   override def millis: Int = asTuple._4
 
-  def toShortText: String = "%02d:%02d".format(hour, minute)
-  def toMediumText: String = "%02d:%02d:%02d".format(hour, minute, second)
-  def toLongText: String = "%02d:%02d:%02d.%03d".format(hour, minute, second, millis)
-
-  override def toString: String = toLongText
+  override def toString: String = this
 
   def +(millis: Long): Time = {
     require(epoch+millis <= TIME_CONSTANT, "Time could not greater than 23:59:59.999")

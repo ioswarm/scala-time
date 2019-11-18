@@ -5,6 +5,7 @@ import java.time.{LocalDateTime, ZoneId}
 object Offsets {
 
   lazy val DEFAULT: Offset = Offset(ZoneId.systemDefault())
+  lazy val LOCAL: Offset = DEFAULT
 
   lazy val zones: Map[String, Offset] = {
     import collection.JavaConverters._

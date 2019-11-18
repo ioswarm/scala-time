@@ -16,13 +16,13 @@ trait DateTimeFacade[T <: DateTimeFacade[T]] extends DateFacade[T] with TimeFaca
 }
 object DateTime {
 
-  def local(): DateTime = DateTime(System.currentTimeMillis(), Offsets.DEFAULT)
+  def utc: DateTime = DateTime(System.currentTimeMillis(), Offsets.UTC)
 
-  def now(): DateTime = DateTime(System.currentTimeMillis(), Offsets.UTC)
+  def now: DateTime = DateTime(System.currentTimeMillis(), Offsets.LOCAL)
 
-  def apply(): DateTime = now()
+  def apply(): DateTime = now
 
-  def apply(epoch: Long): DateTime = DateTime(epoch, Offsets.UTC)
+  def apply(epoch: Long): DateTime = DateTime(epoch, Offsets.LOCAL)
 
   def apply(offset: Offset): DateTime = DateTime(System.currentTimeMillis(), offset)
 
@@ -104,7 +104,7 @@ case class DateTime(epoch: Long, offset: Offset) extends Temporal with DateTimeF
 
   override def millis: Int = asTimeTuple._4
 
-  override def toString: String = toLongText
+  override def toString: String = this
 
   override def +(millis: Long): DateTime = DateTime(epoch+millis, offset)
   override def -(millis: Long): DateTime = DateTime(epoch-millis, offset)

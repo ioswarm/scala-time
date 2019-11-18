@@ -37,17 +37,17 @@ trait DateFacade[T <: DateFacade[T]] {
 }
 object Date {
 
-  def local(): Date = apply(Offsets.DEFAULT)
+  def utc: Date = apply(Offsets.UTC)
 
-  def now(): Date = Date(System.currentTimeMillis(), Offsets.UTC)
+  def now: Date = Date(System.currentTimeMillis(), Offsets.LOCAL)
 
-  def apply(): Date = now()
+  def apply(): Date = now
 
-  def apply(epoch: Long): Date = Date(epoch, Offsets.DEFAULT)
+  def apply(epoch: Long): Date = Date(epoch, Offsets.LOCAL)
 
   def apply(offset: Offset): Date = Date(System.currentTimeMillis(), offset)
 
-  def apply(year: Int, month: Int, dayOfMonth: Int): Date = Date(year, month, dayOfMonth, Offsets.DEFAULT)
+  def apply(year: Int, month: Int, dayOfMonth: Int): Date = Date(year, month, dayOfMonth, Offsets.LOCAL)
 
   def apply(year: Int, month: Int, dayOfMonth: Int, offset: Offset): Date = {
     require(year >= 0 && year <= 9999)
@@ -76,9 +76,7 @@ case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Da
 
   override def dayOfMonth: Int = asTuple._3
 
-  def toText: String = "%04d-%02d-%02d".format(year, month, dayOfMonth)
-
-  override def toString: String = toText
+  override def toString: String = this
 
   override def +(millis: Long): Date = Date(dayNumber(epoch+millis)*DAY_TO_MILLIS, offset)
 

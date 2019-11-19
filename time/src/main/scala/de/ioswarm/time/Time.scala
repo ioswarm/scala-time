@@ -22,6 +22,12 @@ trait TimeFacade[T <: TimeFacade[T]] {
   def plusMinutes(minutes: Int): T = this.+(minutes*MINUTE_TO_MILLIS)
   def plusSeconds(seconds: Int): T = this.+(seconds*SECOND_TO_MILLIS)
 
+  def withHour(h: Int): T
+  def withMinute(m: Int): T
+  def withSecond(s: Int): T
+  def withMillis(S: Int): T
+
+  def withOffset(o: Offset): T
 }
 
 object Time {
@@ -36,7 +42,7 @@ object Time {
 
   def apply(offset: Offset): Time = Time(timeNumber(System.currentTimeMillis()).toLong, offset)
 
-  def apply(hour: Int, minute: Int, second: Int, millis: Int): Time = Time(hour, minute, second, millis, Offsets.DEFAULT)
+  def apply(hour: Int, minute: Int, second: Int, millis: Int): Time = Time(hour, minute, second, millis, Offsets.LOCAL)
 
   def apply(hour: Int, minute: Int, second: Int, millis: Int, offset: Offset): Time = {
     require(hour >= 0 && hour <= 23)
@@ -50,7 +56,7 @@ object Time {
   def apply(hour: Int, minute: Int, second: Int): Time = apply(hour, minute, second, 0)
   def apply(hour: Int, minute: Int): Time = apply(hour, minute, 0, 0)
 
-  @throws[IllegalArgumentException]
+  /*@throws[IllegalArgumentException]
   def apply(time: String): Time = time match {
     case TIME_REGEX(hour, minute, _, second, _, millis) if millis == null && second == null => apply(hour.toInt, minute.toInt)
     case TIME_REGEX(hour, minute, _, second, _, millis) if millis == null => apply(hour.toInt, minute.toInt, second.toInt)
@@ -58,7 +64,7 @@ object Time {
     case _ => throw new IllegalArgumentException
   }
 
-  def fromString(time: String): Time = apply(time)
+  def fromString(time: String): Time = apply(time)*/
 
 }
 case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Time] {
@@ -89,5 +95,15 @@ case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Ti
   def withDate(date: Date): DateTime = and(date)
 
   def toDateTime: DateTime = and(Date(offset))
+
+  override def withHour(h: Int): Time = Time(timeNumber(h, minute, second, millis).toLong, offset)
+
+  override def withMinute(m: Int): Time = Time(timeNumber(hour, minute, second, millis).toLong, offset)
+
+  override def withSecond(s: Int): Time = Time(timeNumber(hour, minute, second, millis).toLong, offset)
+
+  override def withMillis(S: Int): Time = Time(timeNumber(hour, minute, second, millis).toLong, offset)
+
+  override def withOffset(o: Offset): Time = Time(epoch, o)
 
 }

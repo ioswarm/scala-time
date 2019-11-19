@@ -34,6 +34,12 @@ trait DateFacade[T <: DateFacade[T]] {
   def dayOfWeek: Int = dayOfWeekNum(year, month, dayOfMonth)
   def calendarWeek: Int = calendarWeekNum(year, month, dayOfMonth)
 
+  def withYear(y: Int): T
+  def withMonth(m: Int): T
+  def withDayOfMonth(d: Int): T
+
+  def withOffset(o: Offset): T
+
 }
 object Date {
 
@@ -57,13 +63,13 @@ object Date {
     Date(dayNumber(year, month, dayOfMonth) * DAY_TO_MILLIS, offset)
   }
 
-  @throws[IllegalArgumentException]
+  /*@throws[IllegalArgumentException]
   def apply(date: String): Date = date match {
     case DATE_REGEX(year, month, dayOfMonth) => apply(year.toInt, month.toInt, dayOfMonth.toInt)
     case _ => throw new IllegalArgumentException
   }
 
-  def fromString(date: String): Date = apply(date)
+  def fromString(date: String): Date = apply(date)*/
 
 }
 case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Date] {
@@ -86,4 +92,12 @@ case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Da
   def withTime(time: Time): DateTime = and(time)
 
   def toDateTime: DateTime = and(Time(offset))
+
+  override def withYear(y: Int): Date = Date(dayNumber(y, month, dayOfMonth)*DAY_TO_MILLIS, offset)
+
+  override def withMonth(m: Int): Date = Date(dayNumber(year, m, dayOfMonth)*DAY_TO_MILLIS, offset)
+
+  override def withDayOfMonth(d: Int): Date = Date(dayNumber(year, month, d)*DAY_TO_MILLIS, offset)
+
+  override def withOffset(o: Offset): Date = Date(epoch, o)
 }

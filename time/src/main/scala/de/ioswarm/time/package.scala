@@ -112,11 +112,10 @@ package object time {
     OG + (7 - (OG-(7 - (year+year/4+S)%7))%7)
   }
 
-
   // implicit conversions
   implicit def _dateToString(d: Date): String = Formatter.format("yyyy-MM-dd", d)
   implicit def _dateTimeToString(dt: DateTime): String = Formatter.format("yyyy-MM-ddTHH:mm:ss.SZ", dt)
-  implicit def _timeToString(t: Time): String = Formatter.format("HH:mm:ss.S", t)
+  implicit def _timeToString(t: Time): String = Formatter.format("HH:mm:ss", t)
 
 
   import java.util.{Date => UDate}
@@ -144,4 +143,6 @@ package object time {
   implicit def _sqlTimestampToDateTime(st: STimestamp): DateTime = DateTime(st.getTime)
 
   implicit def _sqlTimeToTime(st: STime): Time = Time(st.getTime)
+
 }
+

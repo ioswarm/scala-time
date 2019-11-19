@@ -7,4 +7,6 @@ trait Temporal {
 
   def time: Long = epoch + offset.millis
 
+  def format(format: String): String = Formatter.format(format, this)
+
 }

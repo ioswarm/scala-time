@@ -13,6 +13,7 @@ trait DateTimeFacade[T <: DateTimeFacade[T]] extends DateFacade[T] with TimeFaca
 
   override def minus(d: Duration): T = this.-(d)
   override def minus(millis: Long): T = this.-(millis)
+
 }
 object DateTime {
 
@@ -65,7 +66,7 @@ object DateTime {
 
   def apply(year: Int, month: Int, dayOfMonth: Int): DateTime = apply(year, month, dayOfMonth, 0, 0, 0, 0)
 
-  @throws[IllegalArgumentException]
+  /*@throws[IllegalArgumentException]
   def apply(dt: String): DateTime = dt match {
     case DATETIME_REGEX(year, month, dayOfMonth, hour, minute, _, second, _, millis) if millis == null => apply(year.toInt, month.toInt, dayOfMonth.toInt, hour.toInt, minute.toInt,second.toInt)
     case DATETIME_REGEX(year, month, dayOfMonth, hour, minute, _, second, _, _) if second == null => apply(year.toInt, month.toInt, dayOfMonth.toInt, hour.toInt, minute.toInt)
@@ -73,7 +74,7 @@ object DateTime {
     case _ => throw new IllegalArgumentException
   }
 
-  def fromString(dt: String): DateTime = apply(dt)
+  def fromString(dt: String): DateTime = apply(dt)*/
 
   def apply(dt: (Date, Time), offset: Offset): DateTime = apply(dt._1, dt._2, offset)
   def apply(dt: (Date, Time)): DateTime = apply(dt._1, dt._2)
@@ -111,5 +112,21 @@ case class DateTime(epoch: Long, offset: Offset) extends Temporal with DateTimeF
 
   def toDate: Date = Date(year, month, dayOfMonth, offset)
   def toTime: Time = Time(hour, minute, second, millis, offset)
+
+  override def withYear(y: Int): DateTime = DateTime(dayNumber(y, month, dayOfMonth)*DAY_TO_MILLIS+timeNumber(hour, minute, second, millis)-offset.millis, offset)
+
+  override def withMonth(m: Int): DateTime = DateTime(dayNumber(year, m, dayOfMonth)*DAY_TO_MILLIS+timeNumber(hour, minute, second, millis)-offset.millis, offset)
+
+  override def withDayOfMonth(d: Int): DateTime = DateTime(dayNumber(year, month, d)*DAY_TO_MILLIS+timeNumber(hour, minute, second, millis)-offset.millis, offset)
+
+  override def withHour(h: Int): DateTime = DateTime(dayNumber(year, month, dayOfMonth)*DAY_TO_MILLIS+timeNumber(h, minute, second, millis)-offset.millis, offset)
+
+  override def withMinute(m: Int): DateTime = DateTime(dayNumber(year, month, dayOfMonth)*DAY_TO_MILLIS+timeNumber(hour, m, second, millis)-offset.millis, offset)
+
+  override def withSecond(s: Int): DateTime = DateTime(dayNumber(year, month, dayOfMonth)*DAY_TO_MILLIS+timeNumber(hour, minute, s, millis)-offset.millis, offset)
+
+  override def withMillis(S: Int): DateTime = DateTime(dayNumber(year, month, dayOfMonth)*DAY_TO_MILLIS+timeNumber(hour, minute, second, S)-offset.millis, offset)
+
+  override def withOffset(o: Offset): DateTime = DateTime(epoch, o)
 
 }

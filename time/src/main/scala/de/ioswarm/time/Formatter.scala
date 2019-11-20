@@ -71,7 +71,7 @@ object Formatter {
   ).foldLeft(format, format){(tf, tm) => tf._1.replaceAll(tm._1, tm._2) -> tf._2.replaceAll(tm._1, tm._3)}).flatMap{ vt =>
     vt._1.r.findFirstMatchIn(value).map(m => (0 to m.groupCount).map(m.group).drop(1)).map{vals =>
       "(<[0-9A-F]{3}>)".r.findAllMatchIn(vt._2).map(_.group(0)).toList zip vals
-    }.map{vals => println(s"vals: $vals");vals.foldLeft(DateTime.now){(dt, t) => t._1 match {
+    }.map{vals => vals.foldLeft(DateTime.now){(dt, t) => t._1 match {
       case "<10A>" => dt.withYear(t._2.toInt)
       case "<10B>" => dt.withYear(t._2.toInt)
       case "<10C>" => dt.withYear(t._2.toInt)

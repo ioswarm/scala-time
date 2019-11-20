@@ -17,7 +17,7 @@ class DateSpec extends WordSpec with Matchers {
     }
   }
 
-  List(
+  /*List(
     "A Date(2018, 6, 12) Instance" -> Date(2018, 6, 12)
     , "A Date(\"2018-6-12\") Instance" -> Date("2018-06-12")
   ) foreach { tu =>
@@ -38,7 +38,7 @@ class DateSpec extends WordSpec with Matchers {
         tu._2 shouldEqual Date(2018,6,12)
       }
     }
-  }
+  }*/
 
   "A date 2012-08-25" must {
     val d = Date(2012, 8, 25)

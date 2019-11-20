@@ -124,6 +124,9 @@ package object time {
   implicit def _dateTimeToString(dt: DateTime): String = Formatter.format(dateTimeFormat, dt)
   implicit def _timeToString(t: Time): String = Formatter.format(timeFormat, t)
 
+  implicit def _stringToDate(s: String): Date = Formatter.parseDate(dateTimeFormat, s)
+  implicit def _stringToTime(s: String): Time = Formatter.parseTime(timeFormat, s)
+  implicit def _stringToDateTime(s: String): DateTime = Formatter.parse(dateTimeFormat, s)
 
   import java.util.{Date => UDate}
   import java.sql.{Date => SDate, Time => STime, Timestamp => STimestamp}

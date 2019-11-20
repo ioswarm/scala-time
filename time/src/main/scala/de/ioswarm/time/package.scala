@@ -1,5 +1,7 @@
 package de.ioswarm
 
+import com.typesafe.config.ConfigFactory
+
 package object time {
 
   private[time] final val TIME_MATCH = "([2][0-3]|[0-1][0-9]):([0-5][0-9])(:([0-5][0-9])(\\.([0-9]{1,3}))?)?"
@@ -112,10 +114,15 @@ package object time {
     OG + (7 - (OG-(7 - (year+year/4+S)%7))%7)
   }
 
+  private lazy val config = ConfigFactory.load().getConfig("ioswarm.time")
+  lazy val timeFormat: String = config.getString("timeFormat")
+  lazy val dateFormat: String = config.getString("dateFormat")
+  lazy val dateTimeFormat: String = config.getString("dateTimeFormat")
+
   // implicit conversions
-  implicit def _dateToString(d: Date): String = Formatter.format("yyyy-MM-dd", d)
-  implicit def _dateTimeToString(dt: DateTime): String = Formatter.format("yyyy-MM-ddTHH:mm:ss.SZ", dt)
-  implicit def _timeToString(t: Time): String = Formatter.format("HH:mm:ss", t)
+  implicit def _dateToString(d: Date): String = Formatter.format(dateFormat, d)
+  implicit def _dateTimeToString(dt: DateTime): String = Formatter.format(dateTimeFormat, dt)
+  implicit def _timeToString(t: Time): String = Formatter.format(timeFormat, t)
 
 
   import java.util.{Date => UDate}

@@ -50,7 +50,7 @@ object Formatter {
       .replace("Z", temporal.offset.toText)
   }
 
-  def parse(format: String, value: String): Option[DateTime] = Some(List(
+  def parse(format: String, value: String): DateTime = Some(List(
     ("yyyy", "(\\[0-9]{4})", "<10A>")
     , ("yy", "(\\[0-9]{2})", "<10B>")
     , ("y", "(\\[0-9]+)", "<10C>")
@@ -91,12 +91,12 @@ object Formatter {
       case "<11B>" => dt.withOffset(Offset(t._2))
       case _ => dt
     }}}
-  }
+  }.get
 
-  def parseDateTime(format: String, value: String): Option[DateTime] = parse(format, value)
+  def parseDateTime(format: String, value: String): DateTime = parse(format, value)
 
-  def parseDate(format: String, value: String): Option[Date] = parse(format, value).map(_.toDate)
+  def parseDate(format: String, value: String): Date = parse(format, value).toDate
 
-  def parseTime(format: String, value: String): Option[Time] = parse(format, value).map(_.toTime)
+  def parseTime(format: String, value: String): Time = parse(format, value).toTime
 
 }

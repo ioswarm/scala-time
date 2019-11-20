@@ -63,13 +63,8 @@ object Date {
     Date(dayNumber(year, month, dayOfMonth) * DAY_TO_MILLIS, offset)
   }
 
-  /*@throws[IllegalArgumentException]
-  def apply(date: String): Date = date match {
-    case DATE_REGEX(year, month, dayOfMonth) => apply(year.toInt, month.toInt, dayOfMonth.toInt)
-    case _ => throw new IllegalArgumentException
-  }
-
-  def fromString(date: String): Date = apply(date)*/
+  def apply(date: String, format: String): Date = Formatter.parseDate(format, date)
+  def apply(date: String): Date = apply(date, dateFormat)
 
 }
 case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Date] {

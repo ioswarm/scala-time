@@ -66,15 +66,9 @@ object DateTime {
 
   def apply(year: Int, month: Int, dayOfMonth: Int): DateTime = apply(year, month, dayOfMonth, 0, 0, 0, 0)
 
-  /*@throws[IllegalArgumentException]
-  def apply(dt: String): DateTime = dt match {
-    case DATETIME_REGEX(year, month, dayOfMonth, hour, minute, _, second, _, millis) if millis == null => apply(year.toInt, month.toInt, dayOfMonth.toInt, hour.toInt, minute.toInt,second.toInt)
-    case DATETIME_REGEX(year, month, dayOfMonth, hour, minute, _, second, _, _) if second == null => apply(year.toInt, month.toInt, dayOfMonth.toInt, hour.toInt, minute.toInt)
-    case DATETIME_REGEX(year, month, dayOfMonth, hour, minute, _, second, _, millis) => apply(year.toInt, month.toInt, dayOfMonth.toInt, hour.toInt, minute.toInt, second.toInt, millis.toInt)
-    case _ => throw new IllegalArgumentException
-  }
+  def apply(dt: String, format: String): DateTime = Formatter.parse(format, dt)
+  def apply(dt: String): DateTime = apply(dt, dateTimeFormat)
 
-  def fromString(dt: String): DateTime = apply(dt)*/
 
   def apply(dt: (Date, Time), offset: Offset): DateTime = apply(dt._1, dt._2, offset)
   def apply(dt: (Date, Time)): DateTime = apply(dt._1, dt._2)

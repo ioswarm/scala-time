@@ -56,15 +56,8 @@ object Time {
   def apply(hour: Int, minute: Int, second: Int): Time = apply(hour, minute, second, 0)
   def apply(hour: Int, minute: Int): Time = apply(hour, minute, 0, 0)
 
-  /*@throws[IllegalArgumentException]
-  def apply(time: String): Time = time match {
-    case TIME_REGEX(hour, minute, _, second, _, millis) if millis == null && second == null => apply(hour.toInt, minute.toInt)
-    case TIME_REGEX(hour, minute, _, second, _, millis) if millis == null => apply(hour.toInt, minute.toInt, second.toInt)
-    case TIME_REGEX(hour, minute, _, second, _, millis) => apply(hour.toInt, minute.toInt, second.toInt, millis.toInt)
-    case _ => throw new IllegalArgumentException
-  }
-
-  def fromString(time: String): Time = apply(time)*/
+  def apply(time: String, format: String): Time = Formatter.parseTime(format, time)
+  def apply(time: String): Time = apply(time, timeFormat)
 
 }
 case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Time] {

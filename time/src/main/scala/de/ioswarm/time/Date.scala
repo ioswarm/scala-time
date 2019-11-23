@@ -32,6 +32,15 @@ trait DateFacade[T <: DateFacade[T]] {
 
   def dayOfYear: Int = dayOfYearNum(year, month, dayOfMonth)
   def dayOfWeek: Int = dayOfWeekNum(year, month, dayOfMonth)
+  def weekDay: WeekDays.Day = dayOfWeek match {
+    case 1 => WeekDays.MONDAY
+    case 2 => WeekDays.TUESDAY
+    case 3 => WeekDays.WEDNESDAY
+    case 4 => WeekDays.THURSDAY
+    case 5 => WeekDays.FRIDAY
+    case 6 => WeekDays.SATURDAY
+    case _ => WeekDays.SUNDAY
+  }
   def calendarWeek: Int = calendarWeekNum(year, month, dayOfMonth)
 
   def withYear(y: Int): T
@@ -40,6 +49,7 @@ trait DateFacade[T <: DateFacade[T]] {
 
   def withOffset(o: Offset): T
 
+  def map[B](f: T => B): B
 }
 object Date {
 
@@ -52,6 +62,13 @@ object Date {
   def apply(epoch: Long): Date = Date(epoch, Offsets.LOCAL)
 
   def apply(offset: Offset): Date = Date(System.currentTimeMillis(), offset)
+
+  def apply(year: Int, dayOfYear: Int, offset: Offset): Date = {
+    val dd = Date(year, 1, 1, offset)
+    dd plusDays dayOfYear - 1
+  }
+
+  def apply(year: Int, dayOfYear: Int): Date = apply(year, dayOfYear, Offsets.LOCAL)
 
   def apply(year: Int, month: Int, dayOfMonth: Int): Date = Date(year, month, dayOfMonth, Offsets.LOCAL)
 
@@ -95,4 +112,6 @@ case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Da
   override def withDayOfMonth(d: Int): Date = Date(dayNumber(year, month, d)*DAY_TO_MILLIS, offset)
 
   override def withOffset(o: Offset): Date = Date(epoch, o)
+
+  override def map[B](f: Date => B): B = f(this)
 }

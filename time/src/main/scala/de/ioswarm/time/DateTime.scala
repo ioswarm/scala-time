@@ -123,4 +123,6 @@ case class DateTime(epoch: Long, offset: Offset) extends Temporal with DateTimeF
 
   override def withOffset(o: Offset): DateTime = DateTime(epoch, o)
 
+  override def map[B](f: DateTime => B): B = f(this)
+
 }

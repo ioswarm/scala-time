@@ -78,7 +78,7 @@ package object time {
     val mds = monthDays(year)
     require(month > 0 && month <= 12, "Month must between 1 and 12.")
     require(dayOfMonth<=mds(month-1))
-    if (month == 1) dayOfMonth else mds.take(month-1).sum+dayOfMonth
+    monthDays(year).take(month-1).sum+dayOfMonth
   }
 
   def doomDay(year: Int): Int = {
@@ -104,7 +104,7 @@ package object time {
     } else week
   }
 
-  def easter(year: Int): Int = {
+  private def easterFunc(year: Int): Int = {
     val M: Int = 15 + (if (year > 1582) (3*year/100+3)/4 - (8*year/100+13)/25 else 0)
     val S: Int = if (year > 1582) 2-(3*year/100+3)/4 else 0
     val A = year%19
@@ -118,6 +118,16 @@ package object time {
   lazy val timeFormat: String = config.getString("timeFormat")
   lazy val dateFormat: String = config.getString("dateFormat")
   lazy val dateTimeFormat: String = config.getString("dateTimeFormat")
+
+
+  def easterDate(year: Int): Date = Date(year,3,1) plusDays (easterFunc(year)-1)
+  def firstOfYear(year: Int): Date = Date(year, 1, 1)
+  def lastOfYear(year: Int): Date = Date(year, 12, 1)
+  def firstOfMonth(year: Int, month: Int): Date = Date(year,month,1)
+  def lastOfMonth(year: Int, month: Int): Date = Date(year,month,daysInMonth(year,month))
+  def firstOfWeek(year: Int, week: Int): Date = ???
+  def lastOfWeek(year: Int, week: Int): Date = ???
+
 
   // implicit conversions
   implicit def _dateToString(d: Date): String = Formatter.format(dateFormat, d)

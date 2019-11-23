@@ -22,12 +22,18 @@ trait TimeFacade[T <: TimeFacade[T]] {
   def plusMinutes(minutes: Int): T = this.+(minutes*MINUTE_TO_MILLIS)
   def plusSeconds(seconds: Int): T = this.+(seconds*SECOND_TO_MILLIS)
 
+  def minusHours(hour: Int): T = this.-(hour*HOUR_TO_MILLIS)
+  def minusMinutes(minutes: Int): T = this.-(minutes*MINUTE_TO_MILLIS)
+  def minusSeconds(seconds: Int): T = this.-(seconds*SECOND_TO_MILLIS)
+
   def withHour(h: Int): T
   def withMinute(m: Int): T
   def withSecond(s: Int): T
   def withMillis(S: Int): T
 
   def withOffset(o: Offset): T
+
+  def map[B](f: T => B): B
 }
 
 object Time {
@@ -98,5 +104,7 @@ case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Ti
   override def withMillis(S: Int): Time = Time(timeNumber(hour, minute, second, millis).toLong, offset)
 
   override def withOffset(o: Offset): Time = Time(epoch, o)
+
+  override def map[B](f: Time => B): B = f(this)
 
 }

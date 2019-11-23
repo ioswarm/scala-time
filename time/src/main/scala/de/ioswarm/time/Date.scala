@@ -1,5 +1,7 @@
 package de.ioswarm.time
 
+import scalapb.TypeMapper
+
 import scala.concurrent.duration.Duration
 
 trait DateFacade[T <: DateFacade[T]] {
@@ -83,6 +85,7 @@ object Date {
   def apply(date: String, format: String): Date = Formatter.parseDate(format, date)
   def apply(date: String): Date = apply(date, dateFormat)
 
+  val _dateTypeMapper: TypeMapper[Long, Date] = TypeMapper((l:Long) => Date(l, Offsets.LOCAL))(_.epoch)
 }
 case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Date] {
 

@@ -1,5 +1,7 @@
 package de.ioswarm.time
 
+import scalapb.TypeMapper
+
 import scala.concurrent.duration.Duration
 
 trait DateTimeFacade[T <: DateTimeFacade[T]] extends DateFacade[T] with TimeFacade[T] {
@@ -79,6 +81,7 @@ object DateTime {
   def apply(time: Time, offset: Offset): DateTime = apply(time.epoch, offset)
   def apply(time: Time): DateTime = apply(time.epoch, time.offset)
 
+  implicit val _dateTimeTypeMapper: TypeMapper[Long, DateTime] = TypeMapper((l: Long) => DateTime(l, Offsets.LOCAL))(_.epoch)
 }
 case class DateTime(epoch: Long, offset: Offset) extends Temporal with DateTimeFacade[DateTime] {
 

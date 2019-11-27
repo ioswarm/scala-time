@@ -23,6 +23,7 @@ lazy val time = project.in(file("time"))
   .settings(
 		libraryDependencies ++= Seq(
 			lib.config
+			, lib.runtimeLib
 			, lib.scalaTest
 		)
 	)
@@ -51,6 +52,8 @@ lazy val lib = new {
 
 	val config = "com.typesafe" % "config" % Version.config
   val argonaut = "io.argonaut" %% "argonaut" % Version.argonaut
+
+	val runtimeLib = "com.thesamet.scalapb" %% "scalapb-runtime" % "0.8.2"
 
 	val scalaTest = "org.scalatest" %% "scalatest" % Version.scalaTest % Test
 

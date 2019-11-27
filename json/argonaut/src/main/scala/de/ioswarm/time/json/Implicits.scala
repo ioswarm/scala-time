@@ -1,9 +1,10 @@
-package de.ioswarm.time
+package de.ioswarm.time.json
 
 import argonaut._
 import Argonaut._
+import de.ioswarm.time.{Date, DateTime, Formatter, Time, dateFormat, dateTimeFormat, timeFormat}
 
-package object json {
+trait Implicits {
 
   import java.util.{Date => UDate}
   import java.sql.{Date => SDate, Time => STime, Timestamp => STimestamp}
@@ -109,3 +110,4 @@ package object json {
   }
 
 }
+object Implicits extends Implicits

@@ -1,5 +1,6 @@
 package de.ioswarm.time
 
+import com.google.protobuf.wrappers.Int64Value
 import scalapb.TypeMapper
 
 import scala.concurrent.duration.Duration
@@ -85,7 +86,9 @@ object Date {
   def apply(date: String, format: String): Date = Formatter.parseDate(format, date)
   def apply(date: String): Date = apply(date, dateFormat)
 
-  val _dateTypeMapper: TypeMapper[Long, Date] = TypeMapper((l:Long) => Date(l, Offsets.LOCAL))(_.epoch)
+  val _dateLongTypeMapper: TypeMapper[Long, Date] = TypeMapper((l:Long) => Date(l, Offsets.LOCAL))(_.epoch)
+
+  val _dateInt64WrapperTypeMapper: TypeMapper[Int64Value, Date] = TypeMapper((w:Int64Value) => Date(w.value, Offsets.LOCAL))(d => Int64Value(d.epoch))
 }
 case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Date] {
 

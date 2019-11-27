@@ -70,7 +70,7 @@ object Time {
 
   implicit val _timeTypeMapper: TypeMapper[Long, Time] = TypeMapper((l: Long) => Time(l, Offsets.LOCAL))(_.epoch)
 
-  val _timeInt64WrapperTypeMapper: TypeMapper[Int64Value, Time] = TypeMapper((w:Int64Value) => Time(w.value, Offsets.LOCAL))(t => Int64Value(t.epoch))
+  implicit val _timeInt64WrapperTypeMapper: TypeMapper[Int64Value, Time] = TypeMapper((w:Int64Value) => Time(w.value, Offsets.LOCAL))(t => Int64Value(t.epoch))
 
 }
 case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Time] {

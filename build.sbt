@@ -1,7 +1,7 @@
 lazy val settings = Seq(
 	name := "scala-time"
 	, organization := "de.ioswarm"
-	, version := "0.1.0"
+	, version := "0.1.1"
 	, scalaVersion := "2.12.8"
 	, scalacOptions ++= Seq(
 		"-language:_"

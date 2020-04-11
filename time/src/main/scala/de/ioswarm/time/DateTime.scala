@@ -86,7 +86,7 @@ object DateTime {
 
   implicit val _dateTimeInt64WrapperTypeMapper: TypeMapper[Int64Value, DateTime] = TypeMapper((w:Int64Value) => DateTime(w.value, Offsets.LOCAL))(d => Int64Value(d.epoch))
 }
-case class DateTime(epoch: Long, offset: Offset) extends Temporal with DateTimeFacade[DateTime] {
+case class DateTime(epoch: Long, offset: Offset) extends Temporal with DateTimeFacade[DateTime] with Ordered[DateTime] {
 
   lazy val asTimeTuple: (Int, Int, Int, Int) = timeFromMillis(time)
   lazy val asDateTuple: (Int, Int, Int) = dateFromMillis(time)
@@ -131,4 +131,7 @@ case class DateTime(epoch: Long, offset: Offset) extends Temporal with DateTimeF
 
   override def map[B](f: DateTime => B): B = f(this)
 
+  override def compare(that: DateTime): Int = (epoch - that.epoch).toInt
+
 }
+

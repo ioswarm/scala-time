@@ -53,6 +53,7 @@ trait DateFacade[T <: DateFacade[T]] {
   def withOffset(o: Offset): T
 
   def map[B](f: T => B): B
+
 }
 object Date {
 
@@ -90,7 +91,7 @@ object Date {
 
   implicit val _dateInt64WrapperTypeMapper: TypeMapper[Int64Value, Date] = TypeMapper((w:Int64Value) => Date(w.value, Offsets.LOCAL))(d => Int64Value(d.epoch))
 }
-case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Date] {
+case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Date] with Ordered[Date] {
 
   lazy val asTuple: (Int, Int, Int) = dateFromMillis(time)
 
@@ -120,4 +121,7 @@ case class Date(epoch: Long, offset: Offset) extends Temporal with DateFacade[Da
   override def withOffset(o: Offset): Date = Date(epoch, o)
 
   override def map[B](f: Date => B): B = f(this)
+
+  override def compare(that: Date): Int = (epoch - that.epoch).toInt
+
 }

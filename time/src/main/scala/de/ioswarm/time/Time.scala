@@ -73,7 +73,7 @@ object Time {
   implicit val _timeInt64WrapperTypeMapper: TypeMapper[Int64Value, Time] = TypeMapper((w:Int64Value) => Time(w.value, Offsets.LOCAL))(t => Int64Value(t.epoch))
 
 }
-case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Time] {
+case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Time] with Ordered[Time] {
 
   lazy val asTuple: (Int, Int, Int, Int) = timeFromMillis(time)
 
@@ -113,5 +113,7 @@ case class Time(epoch: Long, offset: Offset) extends Temporal with TimeFacade[Ti
   override def withOffset(o: Offset): Time = Time(epoch, o)
 
   override def map[B](f: Time => B): B = f(this)
+
+  override def compare(that: Time): Int = (epoch - that.epoch).toInt
 
 }
